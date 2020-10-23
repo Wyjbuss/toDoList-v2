@@ -13,6 +13,7 @@ app.use(express.static("public"));
 
 mongoose.set('useUnifiedTopology', true);
 mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
 
 mongoose.connect("mongodb://localhost:27017/todolistDB");
 
@@ -50,7 +51,6 @@ app.get("/", function(req, res) {
 					console.log(err);
 				} else {
 					console.log('Succesfully saved all the items');
-
 				}
 				res.redirect('/');
 			});
@@ -68,22 +68,21 @@ app.get("/", function(req, res) {
 
 app.post("/", function(req, res) {
 
-	const item = req.body.newItem;
+	const itemName = req.body.newItem;
 
-	if (req.body.list === "Work") {
-		workItems.push(item);
-		res.redirect("/work");
-	} else {
-		items.push(item);
-		res.redirect("/");
-	}
+	const item = new Item({
+		name: itemName
+	});
+	item.save();
+	res.redirect("/");
 });
 
-app.get("/work", function(req, res) {
-	res.render("list", {
-		listTitle: "Work List",
-		newListItems: workItems
+app.post("/delete", function(req, res) {
+	const checkedItemId = req.body.deleteItem;
+	Item.findByIdAndRemove(checkedItemId, function(err) {
+		res.redirect("/");
 	});
+
 });
 
 app.get("/about", function(req, res) {
