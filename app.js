@@ -17,7 +17,7 @@ mongoose.set('useUnifiedTopology', true);
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useFindAndModify', false);
 
-mongoose.connect("mongodb://localhost:27017/todolistDB");
+mongoose.connect("mongodb+srv://admin-wyatt:123@cluster0.lbcb4.mongodb.net/todolistDB");
 
 const itemScema = {
 	name: {
